@@ -1,0 +1,16 @@
+configuration {
+/*	modes: "window,drun,run,ssh";*/
+  font: "FiraSans 14";
+  show-icons: true;
+  case-sensitive: false;
+  dpi: -1;
+  timeout {
+      action: "kb-cancel";
+      delay:  0;
+  }
+  filebrowser {
+      directories-first: true;
+      sorting-method:    "name";
+  }
+}
+@theme "~/.config/rofi/theme.rasi"
