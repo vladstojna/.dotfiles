@@ -1,0 +1,32 @@
+#
+# wm independent hotkeys
+#
+
+# terminal emulator
+super + Return
+	alacritty-create-window
+
+# browser
+super + q
+	firefox
+
+# keyboard layout cycler
+super + shift + space
+	xkb-switch --next
+
+# make sxhkd reload its configuration files:
+super + Escape
+	pkill -USR1 -x sxhkd; \
+	notify-send -u low -t 2000 'sxhkd' 'Reloaded config'
+
+# send focused window to scratchpad
+super + minus
+	bspwm-scratchpad --send
+
+# toggle zen mode
+super + z
+	bspwm-zen-mode
+
+# toggle zen mode (pause notifications)
+super + shift + z
+	pause_notifications=true bspwm-zen-mode

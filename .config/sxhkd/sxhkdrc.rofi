@@ -1,0 +1,35 @@
+# program launcher
+super + space
+	rofi -show drun
+
+# window switcher
+super + Tab
+	rofi -modes "window,scratchpad:rofi-scratchpad" -show window
+
+# show scratchpad
+super + shift + Tab
+	rofi -show p -modi p:rofi-scratchpad
+
+# cheatsheet
+super + slash
+	rofi -show p -modi p:rofi-sxhkd-cheatsheet -no-config
+
+# power menu
+super + x
+	rofi -show p -modi p:rofi-power-menu
+
+# vscode recent
+super + v
+	rofi -show vscode-recent -modi vscode-recent
+
+# gpu clock profiles
+super + shift + g
+	rofi -show menu -modi menu:rofi-gpu-clock-profiles
+
+# manage virtual machines
+super + equal
+	rofi -show menu -modi menu:rofi-manage-vms
+
+# show clipmenu
+super + backslash
+	CM_LAUNCHER=rofi clipmenu
