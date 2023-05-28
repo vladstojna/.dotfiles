@@ -1,0 +1,35 @@
+import:
+  - ~/.config/alacritty/theme.yml
+
+env:
+  TERM: xterm-256color
+
+window:
+  padding:
+    x: 8
+    y: 6
+  dynamic_padding: true
+  opacity: 0.95
+  option_as_alt: OnlyLeft
+
+font:
+  normal:
+    family: Iosevka Nerd Font
+    style: Regular
+  size: 14.0
+
+selection:
+  save_to_clipboard: false
+
+cursor:
+  style:
+    blinking: Off
+    shape: Block
+
+live_config_reload: true
+
+shell:
+  program: zsh
+
+working_directory: None
+ipc_socket: true
