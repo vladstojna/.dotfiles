@@ -84,9 +84,7 @@ plugins=(
   tmux
 )
 
-ZSH_TMUX_AUTOSTART=true
 ZSH_TMUX_CONFIG="$HOME/.config/tmux/tmux.conf"
-ZSH_TMUX_DEFAULT_SESSION_NAME="main"
 
 source $ZSH/oh-my-zsh.sh
 

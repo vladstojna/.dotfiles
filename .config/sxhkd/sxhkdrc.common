@@ -2,8 +2,12 @@
 # wm independent hotkeys
 #
 
-# terminal emulator
+# terminal emulator (tmux auto create/attach)
 super + Return
+	alacritty-create-window -e tmux new -A -s main
+
+# terminal emulator
+super + shift + Return
 	alacritty-create-window
 
 # browser
