@@ -18,17 +18,13 @@ super + slash
 super + x
 	rofi -show p -modi p:rofi-power-menu
 
-# vscode recent
-super + v
-	rofi -show vscode-recent -modi vscode-recent
-
 # gpu clock profiles
 super + shift + g
 	rofi -show menu -modi menu:rofi-gpu-clock-profiles
 
 # manage virtual machines
 super + equal
-	rofi -show menu -modi menu:rofi-manage-vms
+	FONT_DESC='Iosevka Nerd Font 14' rofi -show menu -modi menu:rofi-manage-vms
 
 # show clipmenu
 super + backslash
