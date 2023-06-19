@@ -26,6 +26,10 @@ super + shift + g
 super + equal
 	FONT_DESC='Iosevka Nerd Font 14' rofi -show menu -modi menu:rofi-manage-vms
 
+# attach to tmux sessions
+super + period
+	TERM_EMULATOR=alacritty FONT_DESC='Iosevka Nerd Font 14' rofi -show p -modi p:rofi-tmux-sessions
+
 # show clipmenu
 super + backslash
 	CM_LAUNCHER=rofi clipmenu

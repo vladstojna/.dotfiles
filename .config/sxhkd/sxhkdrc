@@ -1,4 +1,0 @@
-# toggle secondary monitor
-super + BackSpace
-	toggle-secondary-monitor; \
-	bspc wm -r
