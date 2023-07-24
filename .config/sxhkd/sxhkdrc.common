@@ -11,7 +11,7 @@ super + shift + Return
 	alacritty-create-window
 
 # browser
-super + q
+super + w
 	firefox
 
 # keyboard layout cycler
