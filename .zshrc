@@ -2,122 +2,110 @@
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+	source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
 ZSH_THEME="powerlevel10k/powerlevel10k"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  zsh-autosuggestions
-  zsh-syntax-highlighting
-  tmux
-)
-
 ZSH_TMUX_CONFIG="$HOME/.config/tmux/tmux.conf"
 
-source $ZSH/oh-my-zsh.sh
+plugins=(
+	git
+	zsh-autosuggestions
+	zsh-syntax-highlighting
+	tmux
+)
 
-# User configuration
+# On macOS, set homebrew environment early if not set. If tmux is installed
+# through homebrew, then the 'tmux' plugin will fail because it will not be in
+# PATH
+if [ "$(uname)" = "Darwin" ] && ! env | grep -q HOMEBREW; then
+	eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
-# export MANPATH="/usr/local/man:$MANPATH"
+source "$ZSH/oh-my-zsh.sh"
 
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+check() {
+	command -v "$1" >/dev/null
+}
 
-# Preferred editor for local and remote sessions
-if [[ -n $SSH_CONNECTION ]]; then
-  export EDITOR='nvim'
+warn() {
+	echo "Warning:" "$@" >&2
+}
+
+_zsh_cli_fg() {
+	fg
+}
+zle -N _zsh_cli_fg
+bindkey '^Z' _zsh_cli_fg
+
+# For clangd
+export CMAKE_EXPORT_COMPILE_COMMANDS=1
+
+[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && PATH="$HOME/.local/bin:${PATH}"
+[[ ":$PATH:" != *":$HOME/.cargo/bin:"* ]] && PATH="$HOME/.cargo/bin:${PATH}"
+
+# Set these vars on macOS for tmux-256color support
+if [ "$(uname)" = "Darwin" ]; then
+	export TERMINFO_DIRS="$TERMINFO_DIRS:$HOME/.local/share/terminfo"
+	export XDG_CONFIG_HOME="$HOME/.config"
+	unalias tmux
+fi
+
+# Conda
+if [ -z "$__CONDA_CMD" ]; then
+	__CONDA_CMD="$HOME/.miniforge3/bin/conda"
+	if check conda; then
+		__CONDA_CMD=conda
+	elif [ ! -f "$HOME/.miniforge3/bin/conda" ]; then
+		warn "$__CONDA_CMD does not exist and 'conda' not in PATH"
+		unset __CONDA_CMD
+	fi
+fi
+if [ -n "$__CONDA_CMD" ]; then
+	eval "$("$__CONDA_CMD" "shell.$(basename "${SHELL}")" hook)"
+	if [ -n "$CONDA_DEFAULT_ENV" ]; then
+		conda activate "$CONDA_DEFAULT_ENV"
+	fi
+fi
+unset __CONDA_CMD
+
+if check exa; then
+	alias ls='exa -al --color=always --group-directories-first'
+	alias la='exa -a --color=always --group-directories-first'
+	alias ll='exa -l --color=always --group-directories-first'
+	alias lt='exa -aT --color=always --group-directories-first'
+	alias l.='exa -a | egrep "^\."'
 else
-  export EDITOR='nvim'
+	warn "'exa' not found"
 fi
 
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-if [ -f "$HOME/.zshrc.custom" ]; then
-  source "$HOME/.zshrc.custom"
+if check nvim; then
+	alias vim=nvim
+	if [[ -n $SSH_CONNECTION ]]; then
+		export EDITOR='nvim'
+	else
+		export EDITOR='nvim'
+	fi
+else
+	warn "'nvim' not found"
 fi
 
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-if [ -f "$HOME/.zshrc.aliases" ]; then
-  source "$HOME/.zshrc.aliases"
+if check bat; then
+	export BAT_PAGER='less -i'
+	export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+	alias cat='bat --paging=never'
+	alias less='bat --paging=always'
+else
+	warn "'bat' not found"
+fi
+
+unset check
+unset warn
+
+# Custom, host-specific settings
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh" ]; then
+	source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh"
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
