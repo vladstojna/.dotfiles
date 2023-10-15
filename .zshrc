@@ -42,8 +42,16 @@ bindkey '^Z' _zsh_cli_fg
 # For clangd
 export CMAKE_EXPORT_COMPILE_COMMANDS=1
 
-[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && PATH="$HOME/.local/bin:${PATH}"
-[[ ":$PATH:" != *":$HOME/.cargo/bin:"* ]] && PATH="$HOME/.cargo/bin:${PATH}"
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+	PATH="$HOME/.local/bin:${PATH}"
+fi
+
+# rustup
+if [ -f "$HOME/.cargo/env" ]; then
+	source "$HOME/.cargo/env"
+else
+	warn "'$HOME/.cargo/env' not found"
+fi
 
 # Set these vars on macOS for tmux-256color support
 if [ "$(uname)" = "Darwin" ]; then
