@@ -78,43 +78,31 @@ if [ -n "$__CONDA_CMD" ]; then
 fi
 unset __CONDA_CMD
 
-if check exa; then
-	alias ls='exa -al --color=always --group-directories-first'
-	alias la='exa -a --color=always --group-directories-first'
-	alias ll='exa -l --color=always --group-directories-first'
-	alias lt='exa -aT --color=always --group-directories-first'
-	alias l.='exa -a | egrep "^\."'
-else
-	warn "'exa' not found"
-fi
+alias ls='exa -al --color=always --group-directories-first'
+alias la='exa -a --color=always --group-directories-first'
+alias ll='exa -l --color=always --group-directories-first'
+alias lt='exa -aT --color=always --group-directories-first'
+alias l.='exa -a | grep -E "^\."'
 
-if check nvim; then
-	alias vim=nvim
-	if [[ -n $SSH_CONNECTION ]]; then
-		export EDITOR='nvim'
-	else
-		export EDITOR='nvim'
-	fi
-else
-	warn "'nvim' not found"
-fi
+alias vim=nvim
+export EDITOR='nvim'
 
-if check bat; then
-	export BAT_PAGER='less -i'
-	export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-	alias cat='bat --paging=never'
-	alias less='bat --paging=always'
-else
-	warn "'bat' not found"
-fi
-
-unset check
-unset warn
+export BAT_PAGER='less -i'
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+alias cat='bat --paging=never'
+alias less='bat --paging=always'
 
 # Custom, host-specific settings
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh" ]; then
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh"
 fi
+
+check exa || warn "'exa' not found"
+check nvim || warn "'nvim' not found"
+check bat || warn "'bat' not found"
+
+unset check
+unset warn
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
