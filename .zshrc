@@ -92,6 +92,11 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 alias cat='bat --paging=never'
 alias less='bat --paging=always'
 
+# Fix bat formatting problems only if groff is installed
+if check groff; then
+	export MANROFFOPT="-c"
+fi
+
 # Custom, host-specific settings
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh" ]; then
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh"
