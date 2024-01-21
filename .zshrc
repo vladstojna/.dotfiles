@@ -88,7 +88,7 @@ alias vim=nvim
 export EDITOR='nvim'
 
 export BAT_PAGER='less -i'
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANPAGER="sh -c 'col -bx | $(command -v bat) -l man -p'"
 alias cat='bat --paging=never'
 alias less='bat --paging=always'
 
