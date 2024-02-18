@@ -97,6 +97,10 @@ if check groff; then
 	export MANROFFOPT="-c"
 fi
 
+if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]; then
+	source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+fi
+
 # Custom, host-specific settings
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh" ]; then
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh"
@@ -105,6 +109,7 @@ fi
 check exa || warn "'exa' not found"
 check nvim || warn "'nvim' not found"
 check bat || warn "'bat' not found"
+check fzf || warn "'fzf' not found"
 
 unset check
 unset warn
