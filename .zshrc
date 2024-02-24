@@ -99,6 +99,14 @@ fi
 
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]; then
 	source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+	export FZF_CTRL_R_OPTS="
+	  --preview 'echo {2..} | bat --color=always -pl sh'
+	  --preview-window up:3:hidden:wrap
+	  --bind 'ctrl-i:toggle-preview'
+	  --bind 'ctrl-t:track+clear-query'
+	  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+	  --color header:italic
+	  --header 'Press CTRL-Y to copy command into clipboard'"
 fi
 
 # Custom, host-specific settings
