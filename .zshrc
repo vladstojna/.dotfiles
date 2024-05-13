@@ -61,22 +61,9 @@ if [ "$(uname)" = "Darwin" ]; then
 fi
 
 # Conda
-if [ -z "$__CONDA_CMD" ]; then
-	__CONDA_CMD="$HOME/.miniforge3/bin/conda"
-	if check conda; then
-		__CONDA_CMD=conda
-	elif [ ! -f "$HOME/.miniforge3/bin/conda" ]; then
-		warn "$__CONDA_CMD does not exist and 'conda' not in PATH"
-		unset __CONDA_CMD
-	fi
+if [ -n "$CONDA_DEFAULT_ENV" ] && [ -e "${XDG_CONFIG_HOME:-$HOME/.config}"/zsh/conda.sh ]; then
+	source "${XDG_CONFIG_HOME:-$HOME/.config}"/zsh/conda.sh
 fi
-if [ -n "$__CONDA_CMD" ]; then
-	eval "$("$__CONDA_CMD" "shell.$(basename "${SHELL}")" hook)"
-	if [ -n "$CONDA_DEFAULT_ENV" ]; then
-		conda activate "$CONDA_DEFAULT_ENV"
-	fi
-fi
-unset __CONDA_CMD
 
 alias ls='exa -al --color=always --group-directories-first'
 alias la='exa -a --color=always --group-directories-first'
@@ -110,7 +97,7 @@ if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]; then
 fi
 
 # Custom, host-specific settings
-if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh" ]; then
+if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh" ]; then
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh"
 fi
 
