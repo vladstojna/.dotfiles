@@ -74,6 +74,7 @@ alias l.='exa -a | grep -E "^\."'
 alias vim=nvim
 export EDITOR='nvim'
 
+export BAT_THEME='Solarized (light)'
 export BAT_PAGER='less -i'
 export MANPAGER="sh -c 'col -bx | $(command -v bat) -l man -p'"
 alias cat='bat --paging=never'
