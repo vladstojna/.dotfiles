@@ -93,7 +93,15 @@ if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]; then
 	  --bind 'ctrl-t:track+clear-query'
 	  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
 	  --color header:italic
-	  --header 'Press CTRL-Y to copy command into clipboard'"
+	  --header 'Preview: Tab, Copy to clipboard: Ctrl-Y'"
+	alias fzf="fzf \
+	  --preview 'bat --color=always -p {}' \
+	  --preview-window right:hidden:wrap \
+	  --bind 'enter:execute(bat --color=always --paging=always {})' \
+	  --bind 'ctrl-i:toggle-preview' \
+	  --bind 'ctrl-y:execute-silent(echo -n {} | pbcopy)+abort' \
+	  --color header:italic \
+	  --header 'Open: Enter, Preview: Tab, Copy to clipboard: Ctrl-Y'"
 fi
 
 # Custom, host-specific settings
