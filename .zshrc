@@ -71,6 +71,8 @@ alias ll='exa -l --color=always --group-directories-first'
 alias lt='exa -aT --color=always --group-directories-first'
 alias l.='exa -a | grep -E "^\."'
 
+alias gl='git log --oneline --graph --color --all --decorate'
+
 alias vim=nvim
 export EDITOR='nvim'
 
