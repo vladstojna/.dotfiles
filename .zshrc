@@ -60,33 +60,6 @@ if [ "$(uname)" = "Darwin" ]; then
 	unalias tmux
 fi
 
-# Conda
-if [ -n "$CONDA_DEFAULT_ENV" ] && [ -e "${XDG_CONFIG_HOME:-$HOME/.config}"/zsh/conda.sh ]; then
-	source "${XDG_CONFIG_HOME:-$HOME/.config}"/zsh/conda.sh
-fi
-
-alias ls='exa -al --color=always --group-directories-first'
-alias la='exa -a --color=always --group-directories-first'
-alias ll='exa -l --color=always --group-directories-first'
-alias lt='exa -aT --color=always --group-directories-first'
-alias l.='exa -a | grep -E "^\."'
-
-alias gl='git log --oneline --graph --color --all --decorate'
-
-alias vim=nvim
-export EDITOR='nvim'
-
-export BAT_THEME='Solarized (light)'
-export BAT_PAGER='less -i'
-export MANPAGER="sh -c 'col -bx | $(command -v bat) -l man -p'"
-alias cat='bat --paging=never'
-alias less='bat --paging=always'
-
-# Fix bat formatting problems only if groff is installed
-if check groff; then
-	export MANROFFOPT="-c"
-fi
-
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]; then
 	source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
 	export FZF_CTRL_R_OPTS="
@@ -112,10 +85,49 @@ if [ -e "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh" ]; then
 	source "${XDG_CONFIG_HOME:-$HOME/.config}/zsh/custom.sh"
 fi
 
-check exa || warn "'exa' not found"
-check nvim || warn "'nvim' not found"
-check bat || warn "'bat' not found"
+# If requested, load conda before checking for commands
+if [ -n "$CONDA_DEFAULT_ENV" ] && [ -e "${XDG_CONFIG_HOME:-$HOME/.config}"/zsh/conda.sh ]; then
+	source "${XDG_CONFIG_HOME:-$HOME/.config}"/zsh/conda.sh
+fi
+
+# Conditionally set aliases/envvars that overwrite common commands/envvars,
+# depending on the presence of new commands. This way it is possible to still
+# use default cmds.
+
+if check exa; then
+	alias ls='exa -al --color=always --group-directories-first'
+	alias la='exa -a --color=always --group-directories-first'
+	alias ll='exa -l --color=always --group-directories-first'
+	alias lt='exa -aT --color=always --group-directories-first'
+	alias l.='exa -a | grep -E "^\."'
+else
+	warn "'exa' not found"
+fi
+
+if check nvim; then
+	alias vim=nvim
+	export EDITOR='nvim'
+else
+	warn "'nvim' not found"
+fi
+
+if check bat; then
+	export BAT_THEME='Solarized (light)'
+	export BAT_PAGER='less -i'
+	export MANPAGER="sh -c 'col -bx | $(command -v bat) -l man -p'"
+	alias cat='bat --paging=never'
+	alias less='bat --paging=always'
+
+	# Fix bat formatting problems only if groff is installed
+	if check groff; then
+		export MANROFFOPT="-c"
+	fi
+else
+	warn "'bat' not found"
+fi
+
 check fzf || warn "'fzf' not found"
+alias gl='git log --oneline --graph --color --all --decorate'
 
 unset check
 unset warn
