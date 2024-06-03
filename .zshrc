@@ -62,12 +62,20 @@ fi
 
 if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]; then
 	source "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh
+	fzf_copy_cmd=/dev/null
+	if [ "$(uname)" = "Darwin" ]; then
+		fzf_copy_cmd=pbcopy
+	elif [ "$XDG_SESSION_TYPE" = wayland ]; then
+		fzf_copy_cmd=wl-copy
+	elif [ "$XDG_SESSION_TYPE" = x11 ]; then
+		fzf_copy_cmd=xclip -selection clipboard
+	fi
 	export FZF_CTRL_R_OPTS="
 	  --preview 'echo {2..} | bat --color=always -pl sh'
 	  --preview-window up:3:hidden:wrap
 	  --bind 'ctrl-i:toggle-preview'
 	  --bind 'ctrl-t:track+clear-query'
-	  --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+	  --bind 'ctrl-y:execute-silent(echo -n {2..} | $fzf_copy_cmd)+abort'
 	  --color header:italic
 	  --header 'Preview: Tab, Copy to clipboard: Ctrl-Y'"
 	alias fzf="fzf \
@@ -75,7 +83,7 @@ if [ -f "${XDG_CONFIG_HOME:-$HOME/.config}"/fzf/fzf.zsh ]; then
 	  --preview-window right:hidden:wrap \
 	  --bind 'enter:execute(bat --color=always --paging=always {})' \
 	  --bind 'ctrl-i:toggle-preview' \
-	  --bind 'ctrl-y:execute-silent(echo -n {} | pbcopy)+abort' \
+	  --bind 'ctrl-y:execute-silent(echo -n {} | $fzf_copy_cmd)+abort' \
 	  --color header:italic \
 	  --header 'Open: Enter, Preview: Tab, Copy to clipboard: Ctrl-Y'"
 fi
