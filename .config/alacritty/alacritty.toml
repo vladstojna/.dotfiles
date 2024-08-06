@@ -1,4 +1,4 @@
-import = ["~/.config/alacritty/theme.toml"]
+import = ["~/.config/alacritty/theme.toml", "~/.config/alacritty/font.toml"]
 ipc_socket = true
 live_config_reload = true
 working_directory = "None"
@@ -9,13 +9,6 @@ shape = "Block"
 
 [env]
 TERM = "xterm-256color"
-
-[font]
-size = 16.0
-
-[font.normal]
-family = "Iosevka NF"
-style = "Regular"
 
 [selection]
 save_to_clipboard = false
@@ -30,4 +23,4 @@ option_as_alt = "OnlyLeft"
 
 [window.padding]
 x = 8
-y = 6
+y = 4
