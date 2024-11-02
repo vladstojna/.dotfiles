@@ -120,7 +120,6 @@ else
 fi
 
 if check bat; then
-	export BAT_THEME='Solarized (light)'
 	export BAT_PAGER='less -i'
 	export MANPAGER="sh -c 'col -bx | $(command -v bat) -l man -p'"
 	alias cat='bat --paging=never'
@@ -132,6 +131,10 @@ if check bat; then
 	fi
 else
 	warn "'bat' not found"
+fi
+
+if check tmux; then
+	alias tm="tmux new -As $USER"
 fi
 
 check fzf || warn "'fzf' not found"
