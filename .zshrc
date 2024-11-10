@@ -134,7 +134,9 @@ else
 fi
 
 if check tmux; then
-	alias tm="tmux new -As $USER"
+	tm() {
+		tmux new -As ${1:-main}
+	}
 fi
 
 check fzf || warn "'fzf' not found"
