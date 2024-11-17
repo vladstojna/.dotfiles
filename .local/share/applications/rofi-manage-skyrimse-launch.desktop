@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=Skyrim SE Manage Launch
-Comment=Manage Skyrim Special Edition launch configurations
-Exec=rofi -show menu -modi menu:rofi-manage-skyrimse-launch
-Terminal=false
-Type=Application
-Categories=Game;

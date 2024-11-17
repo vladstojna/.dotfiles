@@ -1,7 +1,0 @@
-[Desktop Entry]
-Name=calc
-Comment=Run calc
-Exec=alacritty -e calc
-Terminal=false
-Type=Application
-Categories=Calculator;
